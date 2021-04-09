@@ -25,6 +25,10 @@ docker-compose-up -d
 
 ### 2.
 
+Accordingly change the servers image tag in the docker-compose.yml file
+
+### 3.
+
 Visit localhost:3000
 
 ## Features
@@ -34,4 +38,4 @@ Visit localhost:3000
 
 ## Deploy
 
-Ideally deploy client on Vercel and server on droplet (e.g. Digital Ocea)
+Ideally deploy the next front-end on Vercel and the server on a droplet (e.g. Digital Ocea).
