@@ -12,6 +12,10 @@ import cors from "cors";
   await establishDbConnection();
 
   const app = express();
+
+  app.set("trust proxy", 1);
+  // for cookie forwarding since server sits behind the nginx proxy
+
   app.use(cors());
 
   app.get("/state/pulse", (_req, res) => res.send({ alive: true }));
