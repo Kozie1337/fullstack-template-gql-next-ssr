@@ -1,5 +1,4 @@
 import { User } from "./User";
-import { getManager } from "typeorm";
 export default function makeUserManager() {
   return Object.freeze({
     insert,

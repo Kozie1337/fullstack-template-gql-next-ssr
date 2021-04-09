@@ -34,7 +34,7 @@ export class User extends BaseEntity {
   }
 }
 
-export function makeUser(userInfo: User): Promise<User> {
+export function validateUser(userInfo: User): Promise<User> {
   return new Promise(async (resolve, reject) => {
     const { password, email } = userInfo;
     if (!password || !email) {
