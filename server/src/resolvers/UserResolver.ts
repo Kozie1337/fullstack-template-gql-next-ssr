@@ -1,4 +1,4 @@
-import { makeUser, User } from "../entity/User/User";
+import { validateUser, User } from "../entity/User/User";
 import {
   Resolver,
   Query,
@@ -38,7 +38,7 @@ export class UserResolver {
     @Arg("email") email: string,
     @Arg("password") password: string
   ) {
-    const user = await makeUser(new User(email, password)).catch((err) => {
+    const user = await validateUser(new User(email, password)).catch((err) => {
       throw makeUserInputError(err);
     });
 
@@ -68,12 +68,13 @@ export class UserResolver {
     @Arg("password") password: string,
     @Ctx() { req, res }: MyContext
   ): Promise<LoginResponse> {
-    let user;
+    let user = null;
 
-    await makeUser(new User(email, password)).catch((err) => {
+    await validateUser(new User(email, password)).catch((err) => {
       console.log(err);
       throw makeUserInputError(err);
     });
+
     user = await UserManager.findByEmail(email).catch((err) => {
       console.log(err);
 
