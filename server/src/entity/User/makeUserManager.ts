@@ -1,5 +1,8 @@
-import { User } from "./User";
-export default function makeUserManager() {
+import { User } from './User';
+export default function makeUserManager(): Readonly<{
+  insert: (user: User) => Promise<void>;
+  findByEmail: (email: string) => Promise<User | null>;
+}> {
   return Object.freeze({
     insert,
     findByEmail,
@@ -9,16 +12,20 @@ export default function makeUserManager() {
     // update,
   });
 
-  async function insert(user: User) {
-    User.insert({ ...user });
+  async function insert(user: User): Promise<void> {
+    try {
+      User.insert({ ...user });
+    } catch (err) {
+      console.log(err);
+    }
   }
-  async function findByEmail(email: string) {
+  async function findByEmail(email: string): Promise<User | null> {
     let response;
     try {
       const res = await User.findOne({ where: { email } });
       response = res;
-    } catch (e) {
-      console.log(e);
+    } catch (err) {
+      console.log(err);
     }
     return response || null;
   }

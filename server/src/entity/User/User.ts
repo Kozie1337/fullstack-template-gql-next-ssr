@@ -1,9 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
-import isValidEmail from "../../helpers/is-valid-email";
-import { ObjectType, Field, Int } from "type-graphql";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
+import isValidEmail from '../../helpers/is-valid-email';
+import { ObjectType, Field, Int } from 'type-graphql';
 
 @ObjectType() // for gql
-@Entity("users")
+@Entity('users')
 export class User extends BaseEntity {
   @Field(() => Int) // for gql
   @PrimaryGeneratedColumn()
@@ -16,14 +16,14 @@ export class User extends BaseEntity {
   lastName?: string;
 
   @Field()
-  @Column("text")
+  @Column('text')
   email: string;
 
   @Field()
-  @Column("text", { nullable: true })
+  @Column('text', { nullable: true })
   username?: string;
 
-  @Column("text")
+  @Column('text')
   password: string;
 
   constructor(email: string, password: string, username?: string) {
@@ -34,45 +34,44 @@ export class User extends BaseEntity {
   }
 }
 
-export function validateUser(userInfo: User): Promise<User> {
-  return new Promise(async (resolve, reject) => {
+export function validateUser(
+  userInfo: User
+): Promise<User | Record<string, unknown>> {
+  return new Promise((resolve, reject) => {
     const { password, email } = userInfo;
     if (!password || !email) {
-      reject({ emailOrPassword: "Email and password required." });
+      reject({ emailOrPassword: 'Email and password required.' });
     }
 
-    let validPassword;
-    try {
-      validPassword = await validatePassword(password);
-    } catch (err) {
-      // err is of format {field: "errorMsg"}
-      return reject(err);
-    }
-    let validEmail;
-    try {
-      validEmail = await validateEmail(email);
-    } catch (err) {
-      return reject(err);
-    }
+    (async () => {
+      // dont use async as promise executor, e.g. async (resolve, reject) => ...
+      await validatePassword(password).catch((err) => reject(err));
+
+      await validateEmail(email).catch((err) => reject(err));
+    })();
 
     return resolve(userInfo);
   });
 }
 
-function validatePassword(password: string) {
+function validatePassword(
+  password: string
+): Promise<string | Record<string, unknown>> {
   return new Promise((resolve, reject) => {
     if (!password || password.length < 6) {
-      console.log("password error");
-      reject({ password: "Password must be at least 6 characters long." });
+      console.log('password error');
+      reject({ password: 'Password must be at least 6 characters long.' });
     }
     resolve(password);
   });
 }
 
-function validateEmail(email: string) {
+function validateEmail(
+  email: string
+): Promise<string | Record<string, unknown>> {
   return new Promise((resolve, reject) => {
     if (!email || !isValidEmail(email)) {
-      reject({ email: "Invalid email" });
+      reject({ email: 'Invalid email' });
     }
     resolve(email);
   });

@@ -2,25 +2,27 @@ import {
   UserInputError,
   ApolloError,
   AuthenticationError,
-} from "apollo-server-express";
+} from 'apollo-server-express';
 
-export const makeAuthenticationError = () => {
-  return new AuthenticationError("Not authorized. Login required.");
+export const makeAuthenticationError = (): AuthenticationError => {
+  return new AuthenticationError('Not authorized. Login required.');
 };
 
-export const makeLoginError = () => {
-  const validationErrors = { input: "Password and Email not matching" };
-  return new UserInputError("Login failed.", { validationErrors });
+export const makeLoginError = (): UserInputError => {
+  const validationErrors = { input: 'Password and Email not matching' };
+  return new UserInputError('Login failed.', { validationErrors });
 };
 
-export const serverError = new ApolloError("Internal server error.");
+export const serverError = new ApolloError('Internal server error.');
 
-export const makeUserInputError = (errorFields?: {}) => {
+export const makeUserInputError = (
+  errorFields?: Record<string, unknown>
+): UserInputError => {
   const validationErrors = errorFields ? { ...errorFields } : null;
   if (errorFields) {
-    return new UserInputError("Bad User input.", { validationErrors });
+    return new UserInputError('Bad User input.', { validationErrors });
   }
-  return new UserInputError("Bad User input.");
+  return new UserInputError('Bad User input.');
 };
 
 export class UniqueConstraintError extends Error {
