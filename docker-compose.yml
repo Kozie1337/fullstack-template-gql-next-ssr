@@ -13,8 +13,10 @@ services:
       - "5432:5432"
 
 server:
-    #build and tag first: cd Server, 'docker build -t NAME .'
-    image: yourUsername/yourServerImageName:1.0.0
+    #build and tag first: cd Server, 'docker build -t <TAG> .' and replace image: with your <TAG>
+    image: max37/scaffoldserver:1.0.0
+    env_file:
+      - ./server/.env
     depends_on:
       - db
     expose:
