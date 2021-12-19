@@ -38,4 +38,4 @@ Visit localhost:3000
 
 ## Deploy
 
-Ideally deploy the next front-end on Vercel and the server on a droplet (e.g. Digital Ocea).
+Client: Vercel, Server: Droplet.
